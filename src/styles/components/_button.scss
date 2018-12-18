@@ -1,0 +1,16 @@
+.button {
+    border: 1px solid black;
+    border-radius: 3px;
+    color: black;
+    font-size: $m-size;
+    font-weight: 300;
+    padding: $xs-size;
+    text-align: center;
+    text-decoration: none;
+}
+
+
+.button--link {
+    color: black;
+    padding: 0;
+}

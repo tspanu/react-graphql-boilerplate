@@ -1,0 +1,17 @@
+.list-item {
+    color: $dark-grey;
+    display: flex;
+    flex-direction: column;
+    padding: $s-size;
+    text-decoration: none;
+}
+
+.list-item__title {
+    margin: 0;
+    word-break: break-all;
+}
+
+.list-item__sub-title {
+    color: $grey;
+    font-size: $m-size
+}

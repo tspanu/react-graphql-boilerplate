@@ -1,0 +1,13 @@
+.component{
+    background: white;
+    border-radius: $radius-m-size;
+    margin: $m-size auto;
+    max-width: 90rem;
+}
+
+.component__content{
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    padding: $s-size 0;
+}
