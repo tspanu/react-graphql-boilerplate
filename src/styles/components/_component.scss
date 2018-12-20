@@ -3,11 +3,11 @@
     border-radius: $radius-m-size;
     margin: $m-size auto;
     max-width: 90rem;
+    padding: $m-size 0;
 }
 
 .component__content{
     align-items: center;
     display: flex;
     justify-content: space-between;
-    padding: $s-size 0;
 }

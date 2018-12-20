@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import React from 'react'
+import { Mutation, ApolloConsumer } from 'react-apollo'
 import gql from 'graphql-tag'
-import { Mutation } from 'react-apollo'
+
+import LoginForm from './LoginForm'
 import { AUTH_TOKEN } from '../utils/constants'
-import AuthForm from './AuthForm'
 
 const LOGIN_MUTATION = gql`
   mutation LoginMutation($data:LoginUserInput!) {
@@ -17,39 +17,25 @@ const LOGIN_MUTATION = gql`
     }
   }
 `
-export default class Login extends Component {
-    saveUserData = ({ login }) => {
-        localStorage.setItem(AUTH_TOKEN, login.token)
-        this.props.history.replace('/')
-    }
 
+export default class Login extends React.Component {
     render() {
         return (
-            <div className="component">
-                <div className="content-container">
-                    <div className="component__content">
-                        <div>
-                            <h3>
-                                Need an account? <Link to="/signup" className="button--link">Sign up</Link>
-                            </h3>
-                            < Mutation
-                                mutation={LOGIN_MUTATION}
-                                onCompleted={data => this.saveUserData(data)}
-                            >
-                                {(login) => (
-                                    <AuthForm isLogin={true} onSubmit={(user) => {
-                                        const data = {
-                                            email: user.email,
-                                            password: user.password
-                                        }
-                                        login({ variables: { data } })
-                                    }}/>
-                                )}
-                            </Mutation>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <ApolloConsumer>
+                {client => (
+                    < Mutation
+                        mutation={LOGIN_MUTATION}
+                        onCompleted={({ login }) => {
+                            localStorage.setItem(AUTH_TOKEN, login.token)
+                            client.writeData({ data: { isLoggedIn: true } })
+                        }}
+                    >
+                        {(login) => (
+                            <LoginForm login={login} />
+                        )}
+                    </Mutation>
+                )}
+            </ApolloConsumer>
         )
     }
 }

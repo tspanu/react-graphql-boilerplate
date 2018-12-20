@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
 import WidgetItem from './WidgetItem'
+import ErrorMessage from './ErrorMessage';
 
 const getWidgets = gql`
     query {
@@ -15,21 +16,25 @@ const getWidgets = gql`
 const WigetList = () => (
     <div className="component">
         <div className="content-container">
-                <Query query={getWidgets}>
-                    {({ loading, error, data }) => {
-                        if (loading) return <p>Loading...</p>
+            <Query query={getWidgets} fetchPolicy="network-only">
+                {({ loading, error, data }) => {
+                    if (loading) return <p>Loading...</p>
 
-                        if (error) return <p>Not logged in</p>
+                    if (error) return <ErrorMessage error={error} />
 
-                        if (data.widgets.length === 0){
-                           return <h3>No widgets saved</h3>
-                        }
-                        
-                        return data.widgets.map((widget) => (
-                            <WidgetItem key={widget.id} {...widget} />
-                        ))
-                    }}
-                </Query>
+                    return (
+                        <Fragment>
+                            {data.widgets.length ? (
+                                data.widgets.map((widget) => (
+                                    <WidgetItem key={widget.id} {...widget} />
+                                ))
+                            ) : (
+                                    <h3>No widgets saved</h3>
+                                )}
+                        </Fragment>
+                    )
+                }}
+            </Query>
         </div>
     </div>
 )

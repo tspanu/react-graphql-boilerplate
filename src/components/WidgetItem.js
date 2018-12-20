@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
 
@@ -20,7 +20,7 @@ const WidgetItem = ({ id, text }) => (
         <Mutation mutation={DELETE_WIDGET_MUTATION}>
             {(deleteWidget) => (
                 <button className="button" onClick={() => {
-                    deleteWidget({ variables: {id} })
+                    deleteWidget({ variables: { id } })
                 }}>Delete</button>
             )}
         </Mutation>

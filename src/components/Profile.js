@@ -1,13 +1,10 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import { Query } from 'react-apollo'
+import { Query, ApolloConsumer } from 'react-apollo'
 import gql from 'graphql-tag'
-import { AUTH_TOKEN } from '../utils/constants'
 
 const getProfile = gql`
     query {
         me {
-            id
             username
             email
         }
@@ -17,7 +14,7 @@ const getProfile = gql`
 const User = () => (
     <div className="component">
         <div className="content-container">
-            <Query query={getProfile}>
+            <Query query={getProfile} fetchPolicy="network-only">
                 {({ loading, error, data }) => {
                     if (loading) return <p>Loading...</p>
                     if (error) return <p>Not logged in</p>
@@ -28,10 +25,16 @@ const User = () => (
                                 <h3 className="list-item__title">{data.me.username}</h3>
                                 <span className="list-item__sub-title">{data.me.email}</span>
                             </div>
-                            <Link to="/" className="button" onClick={() => {
-                                localStorage.removeItem(AUTH_TOKEN)
-                            }}>Log out</Link>
+                            <ApolloConsumer>
+                                {client => (
+                                    <button className="button" onClick={() => {
+                                        client.writeData({ data: { isLoggedIn: false } })
+                                        localStorage.clear()
+                                    }}>Log out</button>
+                                )}
+                            </ApolloConsumer>
                         </div>
+
                     )
                 }}
             </Query>

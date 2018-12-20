@@ -13,27 +13,25 @@ const CREATE_WIDGET_MUTATION = gql`
 const CreateWidget = () => (
     <div className="component">
         <div className="content-container">
-            <div className="component__content">
-                < Mutation mutation={CREATE_WIDGET_MUTATION}>
-                    {(createWidget) => (
-                        <div>
-                            <input
-                                id="widget-name-input"
-                                type="text"
-                                className="text-input"
-                                placeholder="Widget Name"
-                            />
-                            <button className="button" onClick={() => {
-                                const data = {
-                                    text: document.getElementById("widget-name-input").value
-                                }
-                                createWidget({ variables: { data } })
-                            }}
-                            >Save Widget</button>
-                        </div>
-                    )}
-                </Mutation>
-            </div>
+            < Mutation mutation={CREATE_WIDGET_MUTATION}>
+                {(createWidget) => (
+                    <div>
+                        <input
+                            id="widget-name-input"
+                            type="text"
+                            className="text-input"
+                            placeholder="Widget Name"
+                        />
+                        <button className="button" onClick={() => {
+                            const data = {
+                                text: document.getElementById("widget-name-input").value
+                            }
+                            createWidget({ variables: { data } })
+                        }}
+                        >Create Widget</button>
+                    </div>
+                )}
+            </Mutation>
         </div>
     </div>
 )
