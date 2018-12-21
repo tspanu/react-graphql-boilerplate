@@ -5,7 +5,7 @@ import gql from 'graphql-tag'
 import CreateWidget from './CreateWidget'
 import Auth from './Auth'
 import Profile from './Profile'
-import WidgetList from './WigetList'
+import WidgetList from './WidgetList'
 
 const IS_LOGGED_IN = gql`
   query IsUserLoggedIn {

@@ -14,7 +14,7 @@ const getProfile = gql`
 const User = () => (
     <div className="component">
         <div className="content-container">
-            <Query query={getProfile} fetchPolicy="network-only">
+            <Query query={getProfile}>
                 {({ loading, error, data }) => {
                     if (loading) return <p>Loading...</p>
                     if (error) return <p>Not logged in</p>

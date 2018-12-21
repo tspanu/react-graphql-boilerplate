@@ -2,9 +2,9 @@ import React, { Fragment } from 'react'
 import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
 import WidgetItem from './WidgetItem'
-import ErrorMessage from './ErrorMessage';
+import ErrorMessage from './ErrorMessage'
 
-const getWidgets = gql`
+const GET_WIDGETS = gql`
     query {
         widgets {
             id
@@ -13,10 +13,10 @@ const getWidgets = gql`
     }
 `
 
-const WigetList = () => (
+const WidgetList = () => (
     <div className="component">
         <div className="content-container">
-            <Query query={getWidgets} fetchPolicy="network-only">
+            <Query query={GET_WIDGETS}>
                 {({ loading, error, data }) => {
                     if (loading) return <p>Loading...</p>
 
@@ -39,4 +39,4 @@ const WigetList = () => (
     </div>
 )
 
-export default WigetList
+export { WidgetList as default, GET_WIDGETS }
