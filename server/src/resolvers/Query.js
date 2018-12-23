@@ -8,11 +8,12 @@ const Query = {
             after: args.after,
             orderBy: args.orderBy
         }
-
         if (args.query) {
             opArgs.where = {
                 OR: [{
-                    name_contains: args.query
+                    username: args.query
+                }, {
+                    email: args.query
                 }]
             }
         }

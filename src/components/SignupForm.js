@@ -2,8 +2,11 @@ import React from 'react'
 import { Formik, Field, Form } from 'formik'
 import * as Yup from 'yup'
 
+//This import creates an error
+import prisma from '../../server/src/prisma'
+
 export default class SignupForm extends React.Component {
-    AuthRender = ({ errors, touched, isSubmitting }) => {
+    signupRender = ({ errors, touched, isSubmitting }) => {
         return (
             <Form className="form">
                 <div>
@@ -35,6 +38,20 @@ export default class SignupForm extends React.Component {
         })
     }
 
+    validate = (values) => {
+        let errors = {}
+
+        const emailExists = prisma.exists.User({
+            email: values.email
+        })
+
+        if (emailExists) {
+            errors.email = 'Email taken'
+        }
+
+        return errors
+    }
+
     initialValues = {
         email: '',
         username: '',
@@ -51,9 +68,10 @@ export default class SignupForm extends React.Component {
         return (
             <Formik
                 initialValues={this.initialValues}
+                validate={this.validate}
                 validationSchema={this.validationSchema}
                 onSubmit={this.onSubmit}
-                render={this.AuthRender}
+                render={this.signupRender}
             />
         )
     }

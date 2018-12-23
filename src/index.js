@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom'
 
 import { ApolloClient } from 'apollo-client'
 import { ApolloLink, split } from 'apollo-link'
-import { ApolloProvider, Query } from 'react-apollo'
+import { ApolloProvider } from 'react-apollo'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { WebSocketLink } from 'apollo-link-ws'
 import { createHttpLink } from 'apollo-link-http'
