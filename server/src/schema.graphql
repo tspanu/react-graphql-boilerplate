@@ -2,6 +2,8 @@
 
 type Query {
     users(query: String, first: Int, skip: Int, after: String, orderBy: UserOrderByInput): [User!]!
+    userExists(query: String!): Boolean!
+    usernameExists(username: String!): Boolean!
     me: User!
     widgets(query: String, first: Int, skip: Int, after: String, orderBy: WidgetOrderByInput): [Widget!]!
 }

@@ -20,7 +20,20 @@ const Query = {
 
         return prisma.query.users(opArgs, info)
     },
-    me(parent, args, { prisma, request }, info){
+    userExists(parent, args, { prisma }, info) {
+        const opArgs = {
+            OR: [{
+                username: args.query
+            }, {
+                email: args.query
+            }, {
+                id: args.query
+            }]
+        }
+
+        return prisma.exists.User(opArgs)
+    },
+    me(parent, args, { prisma, request }, info) {
         const userId = getUserId(request)
 
         return prisma.query.user({
@@ -29,7 +42,7 @@ const Query = {
             }
         })
     },
-    widgets(parent, args, { prisma, request }, info){
+    widgets(parent, args, { prisma, request }, info) {
         const userId = getUserId(request)
 
         const opArgs = {

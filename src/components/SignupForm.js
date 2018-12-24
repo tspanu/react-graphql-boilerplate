@@ -1,25 +1,26 @@
 import React from 'react'
-import { Formik, Field, Form } from 'formik'
+import { Formik, Field, Form, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
+import '@babel/polyfill'
+import client from '../index'
+import gql from 'graphql-tag'
 
-//This import creates an error
-import prisma from '../../server/src/prisma'
 
 export default class SignupForm extends React.Component {
     signupRender = ({ errors, touched, isSubmitting }) => {
         return (
             <Form className="form">
                 <div>
-                    {touched.email && errors.email && <p>{errors.email}</p>}
-                    <Field className="text-input" type="email" name="email" placeholder="Email" />
+                    <Field className="text-input" type="email" name="email" placeholder="Email" validate={this.validateEmail} />
+                    <ErrorMessage name="email" />
                 </div>
                 <div>
-                    {touched.username && errors.username && <p>{errors.username}</p>}
-                    <Field className="text-input" type="text" name="username" placeholder="Username" />
+                    <Field className="text-input" type="text" name="username" placeholder="Username" validate={this.validateUsername} />
+                    <ErrorMessage name="username" />
                 </div>
                 <div>
-                    {touched.password && errors.password && <p>{errors.password}</p>}
                     <Field className="text-input" type="password" name="password" placeholder="Password" />
+                    <ErrorMessage name="password" />
                 </div>
                 <button className="button" disabled={isSubmitting} type="submit">Sign up</button>
             </Form>
@@ -38,18 +39,51 @@ export default class SignupForm extends React.Component {
         })
     }
 
-    validate = (values) => {
-        let errors = {}
 
-        const emailExists = prisma.exists.User({
-            email: values.email
+    validateEmail = async (value) => {
+        let error
+
+        const USER_EXISTS = gql`
+            query UserExists($query:String!) {
+                userExists(query: $query) 
+            }
+        `
+
+        const response = await client.query({
+            query: USER_EXISTS,
+            variables: {
+                query: value
+            }
         })
 
-        if (emailExists) {
-            errors.email = 'Email taken'
+        if (response.data.userExists) {
+            error = 'Email taken'
         }
 
-        return errors
+        return error
+    }
+
+    validateUsername = async (value) => {
+        let error
+
+        const USER_EXISTS = gql`
+            query UserExists($query:String!) {
+                userExists(query: $query) 
+            }
+        `
+
+        const response = await client.query({
+            query: USER_EXISTS,
+            variables: {
+                query: value
+            }
+        })
+
+        if (response.data.userExists) {
+            error = 'Username taken'
+        }
+
+        return error
     }
 
     initialValues = {
@@ -67,8 +101,8 @@ export default class SignupForm extends React.Component {
     render() {
         return (
             <Formik
+                validateOnBlur
                 initialValues={this.initialValues}
-                validate={this.validate}
                 validationSchema={this.validationSchema}
                 onSubmit={this.onSubmit}
                 render={this.signupRender}
