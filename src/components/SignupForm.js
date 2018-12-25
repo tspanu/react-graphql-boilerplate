@@ -41,9 +41,8 @@ export default class SignupForm extends React.Component {
                 </div>
                 <div>
                     <ApolloConsumer>
-                        {client => {
-                            console.log(client)
-                            return <Field className="text-input" type="text" name="username" placeholder="Username" validate={async (value) => {
+                        {client => (
+                            <Field className="text-input" type="text" name="username" placeholder="Username" validate={async (value) => {
                                 let error
 
                                 const response = await client.query({
@@ -52,15 +51,14 @@ export default class SignupForm extends React.Component {
                                         query: value
                                     }
                                 })
-                        
+
                                 if (response.data.userExists) {
                                     error = 'Username taken'
                                 }
-                        
+
                                 return error
                             }} />
-                        }
-                        }
+                        )}
                     </ApolloConsumer>
                     <ErrorMessage name="username" />
                 </div>
@@ -83,15 +81,6 @@ export default class SignupForm extends React.Component {
                 }
             }
         })
-    }
-
-
-    validateEmail = async (value, client) => {
-
-    }
-
-    validateUsername = async (value, client) => {
-
     }
 
     initialValues = {
