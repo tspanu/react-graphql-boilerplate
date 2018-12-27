@@ -19,22 +19,7 @@ export default class SignupForm extends React.Component {
                 <div>
                     <ApolloConsumer>
                         {client => (
-                            <Field className="text-input" type="email" name="email" placeholder="Email" validate={async (value) => {
-                                let error
-
-                                const response = await client.query({
-                                    query: USER_EXISTS,
-                                    variables: {
-                                        query: value
-                                    }
-                                })
-
-                                if (response.data.userExists) {
-                                    error = 'Email taken'
-                                }
-
-                                return error
-                            }} />
+                            <Field className="text-input" type="email" name="email" placeholder="Email" validate={this.getValidateEmail(client)} />
                         )}
                     </ApolloConsumer>
                     <ErrorMessage name="email" />
@@ -42,22 +27,7 @@ export default class SignupForm extends React.Component {
                 <div>
                     <ApolloConsumer>
                         {client => (
-                            <Field className="text-input" type="text" name="username" placeholder="Username" validate={async (value) => {
-                                let error
-
-                                const response = await client.query({
-                                    query: USER_EXISTS,
-                                    variables: {
-                                        query: value
-                                    }
-                                })
-
-                                if (response.data.userExists) {
-                                    error = 'Username taken'
-                                }
-
-                                return error
-                            }} />
+                            <Field className="text-input" type="text" name="username" placeholder="Username" validate={this.getValidateUsername(client)} />
                         )}
                     </ApolloConsumer>
                     <ErrorMessage name="username" />
@@ -70,6 +40,46 @@ export default class SignupForm extends React.Component {
             </Form>
         )
     }
+
+
+    getValidateEmail = (client) => {
+        return async (value) => {
+            let error
+
+            const response = await client.query({
+                query: USER_EXISTS,
+                variables: {
+                    query: value
+                }
+            })
+
+            if (response.data.userExists) {
+                error = 'Email taken'
+            }
+
+            return error
+        }
+    }
+
+    getValidateUsername = (client) => {
+        return async (value) => {
+            let error
+
+            const response = await client.query({
+                query: USER_EXISTS,
+                variables: {
+                    query: value
+                }
+            })
+
+            if (response.data.userExists) {
+                error = 'Username taken'
+            }
+
+            return error
+        }
+    }
+
 
     onSubmit = (values) => {
         this.props.signup({

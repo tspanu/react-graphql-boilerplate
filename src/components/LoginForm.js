@@ -1,22 +1,55 @@
 import React from 'react'
-import { Formik, Field, Form } from 'formik'
+import { Formik, Field, Form, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
+
+import '@babel/polyfill'
+import gql from 'graphql-tag'
+import { ApolloConsumer } from 'react-apollo'
+
+const USER_EXISTS = gql`
+    query UserExists($query:String!) {
+        userExists(query: $query) 
+    }
+`
 
 export default class LoginForm extends React.Component {
     AuthRender = ({ errors, touched, isSubmitting }) => {
         return (
             <Form className="form">
                 <div>
-                    {touched.email && errors.email && <p>{errors.email}</p>}
-                    <Field className="text-input" type="email" name="email" placeholder="Email" />
+                    <ApolloConsumer>
+                        {client => (
+                            <Field className="text-input" type="email" name="email" placeholder="Email" validate={this.getValidateEmail(client)} />
+                        )}
+                    </ApolloConsumer>
+                    <ErrorMessage name="email" />
                 </div>
                 <div>
-                    {touched.password && errors.password && <p>{errors.password}</p>}
                     <Field className="text-input" type="password" name="password" placeholder="Password" />
+                    <ErrorMessage name="password" />
                 </div>
                 <button className="button" disabled={isSubmitting} type="submit">Log in</button>
             </Form>
         )
+    }
+
+    getValidateEmail = (client) => {
+        return async (value) => {
+            let error
+
+            const response = await client.query({
+                query: USER_EXISTS,
+                variables: {
+                    query: value
+                }
+            })
+
+            if (!response.data.userExists) {
+                error = "Email doesn't exists"
+            }
+
+            return error
+        }
     }
 
 
