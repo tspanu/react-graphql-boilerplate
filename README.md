@@ -1,1 +1,1 @@
-React Apollo client with Graphql Prisma server
+React Apollo client with Graphql Prisma backend.
